@@ -1,29 +1,18 @@
 {
-  "name": "private-repo",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "app",
+  "version": "0.0.0",
+  "private": true,
   "scripts": {
-    "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node ./bin/www"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/nicoffee/private-repo.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/nicoffee/private-repo/issues"
-  },
-  "homepage": "https://github.com/nicoffee/private-repo#readme",
   "dependencies": {
-    "koa": "^2.4.1",
-    "koa-body": "^2.5.0",
-    "koa-router": "^7.4.0",
-    "koa-views": "^6.1.3"
-  },
-  "devDependencies": {
-    "koa-logger": "^3.1.0"
+    "body-parser": "~1.18.2",
+    "cookie-parser": "~1.4.3",
+    "cors": "^2.8.4",
+    "debug": "~2.6.9",
+    "express": "~4.15.5",
+    "jade": "~1.11.0",
+    "morgan": "~1.9.0",
+    "serve-favicon": "~2.4.5"
   }
 }

@@ -11,7 +11,7 @@ const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const notesRouter = require('./routes/notes');
 
-const url = process.env.DATABASE_URL || 'mongodb://localhost:27017';
+const url = process.env.MONGODB_URI || 'mongodb://localhost:27017';
 const dbName = 'blog';
 
 mongoose.connect(`${url}/${dbName}`);

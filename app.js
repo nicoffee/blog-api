@@ -16,7 +16,7 @@ const logoutRouter = require('./routes/logout');
 
 const url = process.env.MONGODB_URI || 'mongodb://localhost:27017/blog';
 
-const connection = mongoose.connect(`${url}`);
+mongoose.connect(`${url}`);
 
 const app = express();
 
@@ -26,7 +26,7 @@ app.use(
     resave: true,
     saveUninitialized: false,
     store: new MongoStore({
-      mongooseConnection: connection.db,
+      mongooseConnection: mongoose.connection,
       collection: 'sessions'
     })
   })

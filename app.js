@@ -5,7 +5,7 @@ const path = require('path');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 // const bodyParser = require('body-parser');
-// const cors = require('cors');
+const cors = require('cors');
 const mongoose = require('mongoose');
 const MongoStore = require('connect-mongo')(session);
 
@@ -32,7 +32,7 @@ app.use(
   })
 );
 
-// app.use(cors({ credentials: true, origin: true }));
+app.use(cors({ credentials: true, origin: true }));
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));

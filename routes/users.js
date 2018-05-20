@@ -23,12 +23,27 @@ router.post('/', function(req, res, next) {
       if (err) {
         return next(err);
       }
-
-      console.log('User', userData);
     });
   }
 
   res.send('respond with a resource');
+});
+
+router.put('/', function(req, res, next) {
+  if (req.body.email && req.body.password) {
+    const userData = {
+      email: req.body.email,
+      username: req.body.username
+    };
+
+    User.authenticate(userData, function(err) {
+      if (err) {
+        return next(err);
+      }
+    });
+  }
+
+  res.send('login success!');
 });
 
 module.exports = router;

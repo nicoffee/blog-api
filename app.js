@@ -26,7 +26,8 @@ app.use(
     resave: true,
     saveUninitialized: false,
     store: new MongoStore({
-      mongooseConnection: connection
+      mongooseConnection: connection.db,
+      collection: 'sessions'
     })
   })
 );

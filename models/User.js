@@ -34,6 +34,12 @@ UserSchema.statics.authenticate = function(email, password, callback) {
       return callback(err);
     }
 
+    if (user.password !== user.passConf) {
+      const err = new Error('Passwords do not match.');
+      err.status = 401;
+      return callback(err);
+    }
+
     bcrypt.compare(password, user.password, function(err, result) {
       if (result === true) {
         return callback(null, user);

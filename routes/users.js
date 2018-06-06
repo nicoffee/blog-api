@@ -38,12 +38,13 @@ router.put('/', function(req, res, next) {
 
     User.authenticate(userData, function(err) {
       if (err) {
+        res.sendStatus(403);
         return next(err);
       }
+
+      res.send(200, userData);
     });
   }
-
-  res.send('login success!');
 });
 
 module.exports = router;

@@ -8,12 +8,6 @@ const UserSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
-  username: {
-    type: String,
-    unique: true,
-    required: true,
-    trim: true
-  },
   password: {
     type: String,
     required: true
@@ -24,8 +18,8 @@ const UserSchema = new mongoose.Schema({
   }
 });
 
-UserSchema.statics.authenticate = function(email, password, callback) {
-  User.findOne({ email: email }).exec(function(err, user) {
+UserSchema.statics.authenticate = function(user, callback) {
+  User.findOne({ email: user.email }).exec(function(err, user) {
     if (err) {
       return callback(err);
     } else if (!user) {
@@ -40,7 +34,7 @@ UserSchema.statics.authenticate = function(email, password, callback) {
       return callback(err);
     }
 
-    bcrypt.compare(password, user.password, function(err, result) {
+    bcrypt.compare(user.password, user.password, function(err, result) {
       if (result === true) {
         return callback(null, user);
       } else {

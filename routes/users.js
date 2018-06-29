@@ -16,7 +16,7 @@ router.post('/', function(req, res, next) {
         res.send(422, err);
         next(err);
       } else {
-        res.send('User created');
+        res.send({email: userData.email});
       }
     });
   }

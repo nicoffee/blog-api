@@ -6,30 +6,24 @@ const UserSchema = new mongoose.Schema({
     type: String,
     unique: true,
     required: true,
-    trim: true
+    trim: true,
   },
   password: {
     type: String,
-    required: true
+    required: true,
   },
   passwordConf: {
     type: String,
-    required: true
-  }
+    required: true,
+  },
 });
 
 UserSchema.statics.authenticate = function(user, callback) {
-  User.findOne({ email: user.email }).exec(function(err, user) {
+  User.findOne({email: user.email}).exec(function(err, user) {
     if (err) {
       return callback(err);
     } else if (!user) {
       const err = new Error('User not found.');
-      err.status = 401;
-      return callback(err);
-    }
-
-    if (user.password !== user.passConf) {
-      const err = new Error('Passwords do not match.');
       err.status = 401;
       return callback(err);
     }

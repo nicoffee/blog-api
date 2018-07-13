@@ -1,17 +1,17 @@
 const express = require('express');
-const Post = require('./../models/Post');
+const Post = require('./../models/post');
 
 const router = express.Router();
 
 router.get('/', function(req, res) {
   Post.find({}, function(err, posts) {
-    const postMap = {};
+    res.send(posts);
+  });
+});
 
-    posts.forEach(function(post) {
-      postMap[post._id] = post;
-    });
-
-    res.send(postMap);
+router.get('/:id', function(req, res) {
+  Post.findById(req.params.id, function(err, postDetails) {
+    res.send(postDetails);
   });
 });
 

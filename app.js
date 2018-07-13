@@ -24,13 +24,17 @@ app.use(cookieParser());
 
 app.use(
   session({
-    secret: process.env.SESSION_SECRET || 'secret',
+    secret: 'secret', //process.env.SESSION_SECRET ||
     resave: false,
     saveUninitialized: false,
     store: new MongoStore({
       mongooseConnection: mongoose.connection,
       collection: 'sessions',
     }),
+    cookie: {
+      maxAge: 86400000,
+      secure: false,
+    },
   })
 );
 
@@ -48,22 +52,20 @@ app.use('/posts', postsRouter);
 app.use('/logout', logoutRouter);
 app.use('/session', sessionRouter);
 
-// catch 404 and forward to error handler
-// app.use(function(req, res, next) {
-//   const err = new Error('Not Found');
-//   err.status = 404;
-//   next(err);
-// });
+app.use(function(req, res, next) {
+  const err = new Error('Not Found');
+  err.status = 404;
+  next(err);
+});
 
 // error handler
-// app.use(function(err, req, res) {
-//   // set locals, only providing error in development
-//   res.locals.message = err.message;
-//   res.locals.error = req.app.get('env') === 'development' ? err : {};
+app.use(function(err, req, res) {
+  // set locals, only providing error in development
+  res.locals.message = err.message;
+  res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-//   // render the error page
-//   res.status(err.status || 500);
-//   res.render('error');
-// });
+  // render the error page
+  res.status(err.status || 500);
+});
 
 module.exports = app;

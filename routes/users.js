@@ -1,5 +1,5 @@
 const express = require('express');
-const User = require('./../models/User');
+const User = require('./../models/user');
 const {check, validationResult} = require('express-validator/check');
 
 const router = express.Router();
@@ -44,18 +44,16 @@ router.post(
 
 router.put('/', function(req, res, next) {
   if (req.body.email && req.body.password) {
-    const userData = {
-      email: req.body.email,
-    };
+    const userData = req.body;
 
-    User.authenticate(userData, function(err) {
+    User.authenticate(userData, function(err, user) {
       if (err) {
-        res.sendStatus(403);
+        res.status(err.status).send({message: err.message});
         return next(err);
       }
 
-      req.session.user = userData.email;
-      res.send(200, userData);
+      req.session.user = user.email;
+      res.status(200).send({email: user.email});
     });
   }
 });

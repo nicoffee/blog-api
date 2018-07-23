@@ -6,7 +6,9 @@ const router = express.Router();
 router.get('/', function(req, res) {
   Post.find({}, function(err, posts) {
     res.send(posts);
-  });
+  })
+    .limit(Number(req.query.limit))
+    .skip(Number(req.query.offset));
 });
 
 router.get('/:id', function(req, res) {

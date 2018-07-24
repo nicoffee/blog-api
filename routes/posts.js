@@ -18,12 +18,12 @@ router.get('/:id', function(req, res) {
 });
 
 router.post('/', function(req, res, next) {
-  Post.create(req.body, function(err) {
+  Post.create(req.body, function(err, post) {
     if (err) {
       res.send(422, err);
       next(err);
     } else {
-      res.send(req.body);
+      res.send({id: post.id});
     }
   });
 });

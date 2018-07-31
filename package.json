@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "nodemon ./bin/www",
+    "start": "nodemon ./src/bin/www",
     "dev": "npm start & npm run mongo",
     "mongo": "mongod --dbpath ./db",
     "lint": "eslint ./",
@@ -19,6 +19,7 @@
     "express-validator": "^5.2.0",
     "mongoose": "^5.1.1",
     "morgan": "~1.9.0",
+    "ramda": "^0.25.0",
     "serve-favicon": "^2.5.0"
   },
   "devDependencies": {

@@ -4,6 +4,7 @@ const postSchema = new mongoose.Schema({
   picture: String,
   title: String,
   body: String,
+  short_description: String,
   published: {type: Date, default: Date.now},
   author: {id: String, name: String},
   meta: {

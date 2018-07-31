@@ -11,7 +11,7 @@ router.post(
     check('password')
       .isLength({min: 8})
       .custom((value, {req}) => {
-        if (value !== req.body.passwordConf) {
+        if (value !== req.body.password_confirm) {
           throw new Error("Passwords don't match");
         } else {
           return value;
@@ -28,12 +28,11 @@ router.post(
     const userData = {
       email: req.body.email,
       password: req.body.password,
-      passwordConf: req.body.passwordConf,
     };
 
     User.create(userData, function(err) {
       if (err) {
-        res.send(422, err);
+        res.status(422).send(err);
         next(err);
       } else {
         res.send({email: userData.email});

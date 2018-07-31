@@ -12,9 +12,8 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  passwordConf: {
-    type: String,
-    required: true,
+  meta: {
+    likes: [{type: String}],
   },
 });
 
@@ -46,6 +45,7 @@ UserSchema.pre('save', function(next) {
     if (err) {
       return next(err);
     }
+
     user.password = hash;
     next();
   });

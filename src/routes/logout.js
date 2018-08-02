@@ -2,9 +2,9 @@ const express = require('express');
 
 const router = express.Router();
 
-router.get('/', function(req, res, next) {
+router.get('/', (req, res, next) => {
   if (req.session) {
-    req.session.destroy(function(err) {
+    req.session.destroy(err => {
       if (err) {
         return next(err);
       } else {

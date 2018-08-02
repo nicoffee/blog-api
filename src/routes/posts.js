@@ -1,13 +1,11 @@
 const express = require('express');
 const R = require('ramda');
-
 const Post = require('../models/post');
-const User = require('../models/user');
 
 const router = express.Router();
 
-router.get('/', function(req, res) {
-  Post.find({}, function(err, posts) {
+router.get('/', (req, res) => {
+  Post.find({}, (err, posts) => {
     res.send(posts);
   })
     // .select({title: 1, body: 1, published: 1, author: 1})
@@ -15,44 +13,33 @@ router.get('/', function(req, res) {
     .skip(Number(req.query.offset));
 });
 
-router.get('/:id', function(req, res) {
-  Post.findById(req.params.id, function(err, postDetails) {
-    User.findOne({email: req.session.user}, function(err, user) {
-      if (err) {
-        res.send(err);
-      }
+router.get('/:id', (req, res) => {
+  Post.findById(req.params.id)
+    .populate('author')
+    .then(postDetails => {
+      let data = postDetails.toObject();
 
-      if (R.contains(postDetails.id, user.meta.likes)) {
-        const data = R.assoc('isLiked', true, postDetails.toObject());
-
+      if (!req.session.user) {
         res.send(data);
-      } else {
-        res.send(postDetails);
+        return;
       }
+
+      if (postDetails.author.id === req.session.user._id) {
+        data = R.assoc('canEdit', true, data);
+      }
+
+      if (R.contains(req.session.user, postDetails.likes)) {
+        data = R.assoc('isLiked', true, data);
+      }
+
+      res.send(data);
+    })
+    .catch(err => {
+      res.send(err);
     });
-  });
 });
 
-router.put('/:id/like', function(req, res) {
-  Post.findOneAndUpdate({_id: req.params.id}, {$inc: {'meta.likes': 1}}).then(
-    post =>
-      User.findOneAndUpdate(
-        {email: req.session.user},
-        {$push: {'meta.likes': req.params.id}},
-        function(err, raw) {
-          if (err) {
-            res.send(err);
-          }
-
-          const data = R.assoc('isLiked', true, post.toObject());
-
-          res.send(data);
-        }
-      )
-  );
-});
-
-router.post('/', function(req, res, next) {
+router.post('/', (req, res, next) => {
   if (!req.session.user) {
     res.status(401).end();
 
@@ -60,10 +47,11 @@ router.post('/', function(req, res, next) {
   }
 
   const data = Object.assign(req.body, {
+    author: req.session.user,
     short_description: req.body.body.substring(0, 100),
   });
 
-  Post.create(data, function(err, post) {
+  Post.create(data, (err, post) => {
     if (err) {
       res.send(422, err);
       next(err);
@@ -71,6 +59,34 @@ router.post('/', function(req, res, next) {
       res.send({id: post.id});
     }
   });
+});
+
+router.patch('/:id', (req, res) => {
+  Post.findByIdAndUpdate(req.params.id, req.body, {new: true})
+    .then(post => {
+      res.send(post);
+    })
+    .catch(err => {
+      res.send(err);
+    });
+});
+
+router.put('/:id/like', (req, res) => {
+  const isLike = req.body.like;
+
+  const update = isLike
+    ? {$push: {likes: req.session.user}}
+    : {$pull: {likes: req.session.user}};
+
+  Post.findByIdAndUpdate(req.params.id, update, {new: true})
+    .then(post => {
+      const data = R.assoc('isLiked', isLike, post.toObject());
+
+      res.send(data);
+    })
+    .catch(err => {
+      res.send(err);
+    });
 });
 
 module.exports = router;

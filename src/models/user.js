@@ -12,13 +12,12 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  meta: {
-    likes: [{type: String}],
-  },
+  // likes: [{type: String}],
+  posts: [{type: mongoose.Schema.Types.ObjectId, ref: 'Post'}],
 });
 
 UserSchema.statics.authenticate = function(userData, callback) {
-  User.findOne({email: userData.email}).exec(function(err, user) {
+  User.findOne({email: userData.email}).exec((err, user) => {
     if (err) {
       return callback(err);
     } else if (!user) {
@@ -27,7 +26,7 @@ UserSchema.statics.authenticate = function(userData, callback) {
       return callback(err);
     }
 
-    bcrypt.compare(userData.password, user.password, function(err, result) {
+    bcrypt.compare(userData.password, user.password, (err, result) => {
       if (result === true) {
         return callback(null, user);
       } else {
@@ -41,7 +40,7 @@ UserSchema.statics.authenticate = function(userData, callback) {
 
 UserSchema.pre('save', function(next) {
   const user = this;
-  bcrypt.hash(user.password, 10, function(err, hash) {
+  bcrypt.hash(user.password, 10, (err, hash) => {
     if (err) {
       return next(err);
     }

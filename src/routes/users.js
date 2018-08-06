@@ -7,9 +7,12 @@ const router = express.Router();
 router.post(
   '/',
   [
-    check('email').isEmail(),
+    check('email')
+      .isEmail()
+      .withMessage('This is not a valid email'),
     check('password')
       .isLength({min: 8})
+      .withMessage('Must be at least 8 chars long')
       .custom((value, {req}) => {
         if (value !== req.body.password_confirm) {
           throw new Error("Passwords don't match");
@@ -32,8 +35,18 @@ router.post(
 
     User.create(userData, (err, user) => {
       if (err) {
+        if (err.code === 11000) {
+          const duplicateError = new Error(
+            'User with this email already exists'
+          );
+          // debugger;
+          res.status(422).send('User with this email already exists');
+          // next(duplicateError);
+          return;
+        }
+
         res.status(422).send(err);
-        next(err);
+        next();
       } else {
         req.session.user = user;
         res.send({email: userData.email});

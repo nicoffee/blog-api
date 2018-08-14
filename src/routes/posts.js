@@ -5,8 +5,12 @@ const Post = require('../models/post');
 const router = express.Router();
 
 router.get('/', (req, res) => {
-  Post.find({}, (err, posts) => {
-    res.send(posts);
+  const query = req.query.search
+    ? {title: {$regex: req.query.search, $options: 'i'}}
+    : {};
+
+  Post.find(query, (err, posts) => {
+    setTimeout(() => res.send(posts), 10000);
   })
     // .select({title: 1, body: 1, published: 1, author: 1})
     .limit(Number(req.query.limit))

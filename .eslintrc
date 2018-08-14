@@ -11,6 +11,7 @@
   "rules": {
     "no-var": "error",
     "prefer-const": "error",
-    "prefer-arrow-callback": "error"
+    "prefer-arrow-callback": "error",
+    "no-inline-comments": "warn"
   }
 }

@@ -10,7 +10,7 @@ router.get('/', (req, res) => {
     : {};
 
   Post.find(query, (err, posts) => {
-    setTimeout(() => res.send(posts), 10000);
+    res.send(posts);
   })
     // .select({title: 1, body: 1, published: 1, author: 1})
     .limit(Number(req.query.limit))
@@ -30,10 +30,14 @@ router.get('/:id', (req, res) => {
 
       if (postDetails.author.id === req.session.user._id) {
         data = R.assoc('canEdit', true, data);
+      } else {
+        data = R.assoc('canEdit', false, data);
       }
 
-      if (R.contains(req.session.user, postDetails.likes)) {
+      if (R.contains(req.session.user._id, postDetails.likes)) {
         data = R.assoc('isLiked', true, data);
+      } else {
+        data = R.assoc('isLiked', false, data);
       }
 
       res.send(data);
@@ -79,8 +83,8 @@ router.put('/:id/like', (req, res) => {
   const isLike = req.body.like;
 
   const update = isLike
-    ? {$push: {likes: req.session.user}}
-    : {$pull: {likes: req.session.user}};
+    ? {$push: {likes: req.session.user._id}}
+    : {$pull: {likes: req.session.user._id}};
 
   Post.findByIdAndUpdate(req.params.id, update, {new: true})
     .then(post => {

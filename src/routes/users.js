@@ -36,9 +36,8 @@ router.post(
     User.create(userData, (err, user) => {
       if (err) {
         if (err.code === 11000) {
-          // debugger;
           res.status(422).send('User with this email already exists');
-          // next(duplicateError);
+
           return;
         }
 

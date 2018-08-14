@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start": "nodemon ./src/bin/www",
+    "tsc": "tsc",
     "dev": "npm start & npm run mongo",
     "mongo": "mongod --dbpath ./db",
     "lint": "eslint ./",

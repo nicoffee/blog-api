@@ -54,10 +54,11 @@ router.post('/', (req, res, next) => {
     return;
   }
 
-  const data = Object.assign(req.body, {
+  const data = {
+    ...req.body,
     author: req.session.user,
     short_description: req.body.body.substring(0, 100),
-  });
+  };
 
   Post.create(data, (err, post) => {
     if (err) {

@@ -1,8 +1,8 @@
-const express = require('express');
-
+import * as express from 'express';
+import {IGetUserAuthInfoRequest} from '../definition';
 const router = express.Router();
 
-router.get('/', (req, res, next) => {
+router.get('/', (req: IGetUserAuthInfoRequest, res, next) => {
   if (req.session) {
     req.session.destroy(err => {
       if (err) {

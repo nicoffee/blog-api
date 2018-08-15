@@ -1,5 +1,9 @@
-const mongoose = require('mongoose');
+import * as mongoose from 'mongoose';
 const bcrypt = require('bcrypt');
+
+interface User {
+  password: any; // Actually should be something like `multer.Files`
+}
 
 const UserSchema = new mongoose.Schema({
   email: {
@@ -17,11 +21,12 @@ const UserSchema = new mongoose.Schema({
 });
 
 UserSchema.statics.authenticate = function(userData, callback) {
-  User.findOne({email: userData.email}).exec((err, user) => {
+  User.findOne({email: userData.email}).exec((err, user: User) => {
     if (err) {
       return callback(err);
     } else if (!user) {
-      const err = new Error('User not found');
+      let err: any;
+      err = new Error('User not found');
       err.status = 401;
       return callback(err);
     }
@@ -30,7 +35,8 @@ UserSchema.statics.authenticate = function(userData, callback) {
       if (result === true) {
         return callback(null, user);
       } else {
-        const err = new Error('Password incorrect');
+        let err: any;
+        err = new Error('Password incorrect');
         err.status = 401;
         return callback(err);
       }
@@ -39,7 +45,8 @@ UserSchema.statics.authenticate = function(userData, callback) {
 };
 
 UserSchema.pre('save', function(next) {
-  const user = this;
+  const user: any = this;
+
   bcrypt.hash(user.password, 10, (err, hash) => {
     if (err) {
       return next(err);

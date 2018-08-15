@@ -1,6 +1,6 @@
-const express = require('express');
-const R = require('ramda');
-const Post = require('../models/post');
+import * as express from 'express';
+import R from 'ramda';
+import Post from '../models/post';
 
 const router = express.Router();
 
@@ -28,17 +28,17 @@ router.get('/:id', (req, res) => {
         return;
       }
 
-      if (postDetails.author.id === req.session.user._id) {
-        data = R.assoc('canEdit', true, data);
-      } else {
-        data = R.assoc('canEdit', false, data);
-      }
+      data = R.assoc(
+        'canEdit',
+        postDetails.author.id === req.session.user._id,
+        data
+      );
 
-      if (R.contains(req.session.user._id, postDetails.likes)) {
-        data = R.assoc('isLiked', true, data);
-      } else {
-        data = R.assoc('isLiked', false, data);
-      }
+      data = R.assoc(
+        'canEdit',
+        R.contains(req.session.user._id, postDetails.likes),
+        data
+      );
 
       res.send(data);
     })
@@ -98,4 +98,4 @@ router.put('/:id/like', (req, res) => {
     });
 });
 
-module.exports = router;
+export default router;

@@ -4,6 +4,6 @@ export interface IGetUserAuthInfoRequest extends Request {
   session?: any;
 }
 
-export interface Error {
+export interface IError {
   status?: number;
 }

@@ -2,6 +2,8 @@
   "defaultSeverity": "warning",
   "extends": ["tslint:latest", "tslint-config-prettier"],
   "jsRules": {},
-  "rules": {},
+  "rules": {
+    "no-submodule-imports": false
+  },
   "rulesDirectory": []
 }

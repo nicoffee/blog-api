@@ -1,5 +1,6 @@
 import * as express from 'express';
 import {IGetUserAuthInfoRequest} from '../definition';
+
 const router = express.Router();
 
 router.get('/', (req: IGetUserAuthInfoRequest, res, next) => {
@@ -14,4 +15,4 @@ router.get('/', (req: IGetUserAuthInfoRequest, res, next) => {
   }
 });
 
-module.exports = router;
+export default router;

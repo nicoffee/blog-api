@@ -1,6 +1,6 @@
-const express = require('express');
-const User = require('../models/user');
-const {check, validationResult} = require('express-validator/check');
+import * as express from 'express';
+import {check, validationResult} from 'express-validator/check';
+import User from '../models/user';
 
 const router = express.Router();
 
@@ -67,4 +67,4 @@ router.put('/', (req, res, next) => {
   }
 });
 
-module.exports = router;
+export default router;

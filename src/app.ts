@@ -1,43 +1,47 @@
 import * as express from 'express';
 import * as session from 'express-session';
 
-const path = require('path');
+import * as connectMongo from 'connect-mongo';
+import * as cookieParser from 'cookie-parser';
+import cors from 'cors';
+import * as mongoose from 'mongoose';
 // const favicon = require('serve-favicon');
-const logger = require('morgan');
-const cookieParser = require('cookie-parser');
-const cors = require('cors');
-const mongoose = require('mongoose');
-const MongoStore = require('connect-mongo')(session);
+import * as logger from 'morgan';
+import * as path from 'path';
 
-const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
-const postsRouter = require('./routes/posts');
-const logoutRouter = require('./routes/logout');
-const sessionRouter = require('./routes/session');
+import indexRouter from './routes/index';
+import logoutRouter from './routes/logout';
+import postsRouter from './routes/posts';
+import sessionRouter from './routes/session';
+import usersRouter from './routes/users';
 
 // import {Error} from './definition';
 
 const url = process.env.MONGODB_URI || 'mongodb://localhost:27017/blog';
 
-mongoose.connect(url);
+mongoose.connect(
+  url,
+  {useNewUrlParser: true}
+);
 
 const app = express();
+const MongoStore = connectMongo(session);
 
 app.use(cookieParser());
 
 app.use(
   session({
-    secret: 'secret', // process.env.SESSION_SECRET ||
-    resave: false,
-    saveUninitialized: false,
-    store: new MongoStore({
-      mongooseConnection: mongoose.connection,
-      collection: 'sessions',
-    }),
     cookie: {
       maxAge: 86400000,
       secure: false,
     },
+    resave: false,
+    saveUninitialized: false,
+    secret: 'secret', // process.env.SESSION_SECRET ||
+    store: new MongoStore({
+      collection: 'sessions',
+      mongooseConnection: mongoose.connection,
+    }),
   })
 );
 

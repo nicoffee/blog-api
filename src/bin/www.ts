@@ -4,9 +4,9 @@
  * Module dependencies.
  */
 
-const app = require('../app');
-const debug = require('debug')('api:server');
-const http = require('http');
+import * as debug from 'debug';
+import * as http from 'http';
+import * as app from '../app';
 
 /**
  * Get port from environment and store in Express.
@@ -34,16 +34,16 @@ server.on('listening', onListening);
  */
 
 function normalizePort(val) {
-  const port = parseInt(val, 10);
+  const parsedPort = parseInt(val, 10);
 
-  if (isNaN(port)) {
+  if (isNaN(parsedPort)) {
     // named pipe
     return val;
   }
 
-  if (port >= 0) {
+  if (parsedPort >= 0) {
     // port number
-    return port;
+    return parsedPort;
   }
 
   return false;
@@ -63,11 +63,11 @@ function onError(error) {
   // handle specific listen errors with friendly messages
   switch (error.code) {
     case 'EACCES':
-      console.error(bind + ' requires elevated privileges');
+      // console.error(bind + ' requires elevated privileges');
       process.exit(1);
       break;
     case 'EADDRINUSE':
-      console.error(bind + ' is already in use');
+      // console.error(bind + ' is already in use');
       process.exit(1);
       break;
     default:
@@ -82,5 +82,5 @@ function onError(error) {
 function onListening() {
   const addr = server.address();
   const bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
-  debug('Listening on ' + bind);
+  debug('api:server')('Listening on ' + bind);
 }

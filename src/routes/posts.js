@@ -42,8 +42,8 @@ router.get('/:id', (req, res) => {
 
       res.send(data);
     })
-    .catch(err => {
-      res.send(err);
+    .catch(() => {
+      res.status(404).send({message: 'Post not found'});
     });
 });
 

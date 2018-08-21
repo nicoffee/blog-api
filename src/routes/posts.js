@@ -28,17 +28,17 @@ router.get('/:id', (req, res) => {
         return;
       }
 
-      if (postDetails.author.id === req.session.user._id) {
-        data = R.assoc('canEdit', true, data);
-      } else {
-        data = R.assoc('canEdit', false, data);
-      }
+      data = R.assoc(
+        'isAuthor',
+        postDetails.author.id === req.session.user._id,
+        data
+      );
 
-      if (R.contains(req.session.user._id, postDetails.likes)) {
-        data = R.assoc('isLiked', true, data);
-      } else {
-        data = R.assoc('isLiked', false, data);
-      }
+      data = R.assoc(
+        'isLiked',
+        R.contains(req.session.user._id, postDetails.likes),
+        data
+      );
 
       res.send(data);
     })
@@ -64,13 +64,23 @@ router.post('/', (req, res, next) => {
       res.send(422, err);
       next(err);
     } else {
-      res.send({id: post.id});
+      res.send(post);
     }
   });
 });
 
 router.patch('/:id', (req, res) => {
   Post.findByIdAndUpdate(req.params.id, req.body, {new: true})
+    .then(post => {
+      res.send(post);
+    })
+    .catch(err => {
+      res.send(err);
+    });
+});
+
+router.delete('/:id', (req, res) => {
+  Post.remove({_id: req.params.id})
     .then(post => {
       res.send(post);
     })

@@ -62,7 +62,7 @@ router.put('/', (req, res, next) => {
       }
 
       req.session.user = user;
-      res.status(200).send({email: user.email});
+      res.status(200).send(user);
     });
   }
 });

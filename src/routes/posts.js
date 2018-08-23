@@ -1,6 +1,7 @@
 const express = require('express');
 const R = require('ramda');
 const Post = require('../models/post');
+const User = require('../models/user');
 
 const router = express.Router();
 
@@ -64,7 +65,13 @@ router.post('/', (req, res, next) => {
       res.send(422, err);
       next(err);
     } else {
-      res.send(post);
+      User.findByIdAndUpdate(
+        req.session.user._id,
+        {$push: {posts: post.id}},
+        (err, user) => {
+          res.send(post);
+        }
+      );
     }
   });
 });

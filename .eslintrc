@@ -5,13 +5,11 @@
   },
   "extends": "eslint:recommended",
   "env": {
-    "browser": true,
     "node": true
   },
   "rules": {
     "no-var": "error",
     "prefer-const": "error",
-    "prefer-arrow-callback": "error",
-    "no-inline-comments": "warn"
+    "prefer-arrow-callback": "error"
   }
 }

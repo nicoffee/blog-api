@@ -15,7 +15,8 @@ router.get('/', (req, res) => {
   })
     // .select({title: 1, body: 1, published: 1, author: 1})
     .limit(Number(req.query.limit))
-    .skip(Number(req.query.offset));
+    .skip(Number(req.query.offset))
+    .sort({published: -1});
 });
 
 router.get('/:id', (req, res) => {
